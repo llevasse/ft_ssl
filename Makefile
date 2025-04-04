@@ -10,6 +10,10 @@ NC						=	\033[0m
 
 #---FT_SSL_VAR-----------------------------------
 SRC						=	srcs/main.c \
+											srcs/md5.c \
+											srcs/sha256.c \
+											srcs/base64.c \
+											srcs/rsa.c
 							
 
 OBJS_DIR				=	.OBJS/
@@ -26,7 +30,7 @@ INCLUDES				=	-I $(INC_DIR)
 all:			$(NAME)
 
 $(NAME):		$(OBJS_DIR) Makefile $(INC_FILE) $(OBJS)
-				$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -o $@
+				$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -D FT_SSL_MD5=1 -o $@
 				@echo "\33[2K\r$(GREEN)$(NAME) compiled :D$(NC)"
 
 
