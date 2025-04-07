@@ -2,19 +2,15 @@
 
 int ft_md5(char *input_path){
 	char *input = 0x0;
-	if (input_path){
-		int fd = open(input_path, O_RDONLY);
-		if (fd < 0){
-			fprintf(stderr, "Error opening input file : %s\n", strerror(errno));
-			return (1);
-		}
-		close(fd);
-	}
-	else{
 	
+	if (input_path){
+		if ((input = read_file(input_path)) == 0x0)
+			return (1);
+		printf("MD5(%s)= ", input_path);
 	}
-	(void)input;
-	(void)input_path;
-	printf("md5\n");
+	else
+		printf("MD5(stdin)= ");	
+	printf("%s", input);
+	free(input);
 	return (0);
 }

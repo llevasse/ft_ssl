@@ -6,6 +6,7 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <unistd.h>
+# include <stdlib.h>
 
 # ifndef FT_SSL_MD5
 #  define FT_SSL_MD5 0
@@ -28,6 +29,9 @@ int ft_des_cbc(char *input_path);
 int ft_genrsa(char *input_path);
 int ft_rsa(char *input_path);
 int ft_rsault(char *input_path);
+
+char *read_file(char *path);
+
 
 void	help();
 #endif
