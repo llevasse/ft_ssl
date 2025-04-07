@@ -31,6 +31,7 @@ int ft_rsa(char *input_path);
 int ft_rsault(char *input_path);
 
 char *read_file(char *path);
+char *read_stdin();
 
 
 void	help();
