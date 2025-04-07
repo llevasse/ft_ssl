@@ -14,17 +14,16 @@ int main (int ac, char **av){
 	(void)av[ac - 1];
 	
 	if (ac <= 1){
-		printf("ft_ssl: Error: Not enough arguments.\n\n");
-		help();
+		printf("usage: ft_ssl command [flags] [file/string]\n");
 		return 1;
 	}
 	
 	for (int i = 0; allowed_command[i]; i++){
-		if (!strcmp(av[ac - 1], allowed_command[i])){
-			return (command_functions[i]());
+		if (!strcmp(av[1], allowed_command[i])){
+			return (command_functions[i](av[2]));
 		}
 	}
-	printf("ft_ssl: Error: %s is an invalid command.\n\n", av[ac - 1]);
+	printf("ft_ssl: Error: %s is an invalid command.\n\n", av[1]);
 	help();
 	return 0;
 }

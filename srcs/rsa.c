@@ -1,6 +1,7 @@
 #include "../include/ft_ssl.h"
 
-int ft_genrsa(){
+int ft_genrsa(char *input_path){
+	(void)input_path;
 	if (!FT_SSL_RSA){
 		printf("ft_ssl: Error: genrsa is an invalid command.\n\n");
 		help();
@@ -9,7 +10,8 @@ int ft_genrsa(){
 	return 0;
 }
 
-int ft_rsa(){
+int ft_rsa(char *input_path){
+	(void)input_path;
 	if (!FT_SSL_RSA){
 		printf("ft_ssl: Error: rsa is an invalid command.\n\n");
 		help();
@@ -18,7 +20,8 @@ int ft_rsa(){
 	return 0;
 }
 
-int ft_rsault(){
+int ft_rsault(char *input_path){
+	(void)input_path;
 	if (!FT_SSL_RSA){
 		printf("ft_ssl: Error: rsault is an invalid command.\n\n");
 		help();

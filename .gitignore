@@ -1,0 +1,7 @@
+*.o
+*.swp
+*.log
+*.text
+ft_ssl
+a.out
+.OBJS/
