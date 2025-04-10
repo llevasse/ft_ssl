@@ -18,26 +18,37 @@ SRC						=	srcs/main.c \
 							
 
 OBJS_DIR				=	.OBJS/
+OBJS_DIR_SAN				=	.OBJS_SAN/
 OBJS					=	$(addprefix $(OBJS_DIR), $(SRC:.c=.o))
+OBJS_SAN					=	$(addprefix $(OBJS_DIR_SAN), $(SRC:.c=_san.o))
 
 INC_DIR					=	include/
 INC_FILE				=	include/ft_ssl.h 
 
-FLAGS					=	-Wall -Werror -Wextra -g 
+FLAGS					=	-Wall -Werror -Wextra -g
 INCLUDES				=	-I $(INC_DIR) 
 
 #---RULES----------------------------------------
 
 all:			$(NAME)
 
-$(NAME):		$(OBJS_DIR) Makefile $(INC_FILE) $(OBJS)
+$(NAME):		$(OBJS_DIR) Makefile $(INC_FILE) $(OBJS) $(OBJS_SAN)
 				$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -D FT_SSL_MD5=1 -lm -o $@
+				$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) $(OBJS_SAN) -D FT_SSL_MD5=1 -lm -o $@_san
 				@echo "\33[2K\r$(GREEN)$(NAME) compiled :D$(NC)"
 
+valgrind: fclean
+				make
+				valgrind ./ft_ssl md5 Makefile
 
 $(OBJS_DIR)%.o:	%.c $(INC_FILE)
 				@mkdir -p $(shell dirname $@)
-				@$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+				$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+				@echo "\33[2K\r$(YELLOW)Compiled $<$(NC)"
+
+$(OBJS_DIR_SAN)%_san.o:	%.c $(INC_FILE)
+				@mkdir -p $(shell dirname $@)
+				$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) -c $< -o $@
 				@echo "\33[2K\r$(YELLOW)Compiled $<$(NC)"
 
 $(OBJS_DIR):
