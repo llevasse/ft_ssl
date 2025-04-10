@@ -7,6 +7,7 @@
 # include <errno.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <math.h>
 
 # ifndef FT_SSL_MD5
 #  define FT_SSL_MD5 0

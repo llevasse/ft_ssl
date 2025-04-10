@@ -23,15 +23,15 @@ OBJS					=	$(addprefix $(OBJS_DIR), $(SRC:.c=.o))
 INC_DIR					=	include/
 INC_FILE				=	include/ft_ssl.h 
 
-FLAGS					=	-Wall -Werror -Wextra -g
-INCLUDES				=	-I $(INC_DIR)
+FLAGS					=	-Wall -Werror -Wextra -g 
+INCLUDES				=	-I $(INC_DIR) 
 
 #---RULES----------------------------------------
 
 all:			$(NAME)
 
 $(NAME):		$(OBJS_DIR) Makefile $(INC_FILE) $(OBJS)
-				$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -D FT_SSL_MD5=1 -o $@
+				$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -D FT_SSL_MD5=1 -lm -o $@
 				@echo "\33[2K\r$(GREEN)$(NAME) compiled :D$(NC)"
 
 
