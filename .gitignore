@@ -3,5 +3,6 @@
 *.log
 *.text
 ft_ssl
+ft_ssl_san
 a.out
 .OBJS/

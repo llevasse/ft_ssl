@@ -1,5 +1,6 @@
 #---COMMON_VAR-----------------------------------
 NAME					=	ft_ssl
+NAME_SAN	=	ft_ssl_san
 CC						=	cc
 RM						=	rm -rf
 
@@ -34,7 +35,7 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS_DIR) Makefile $(INC_FILE) $(OBJS) $(OBJS_SAN)
 				$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -D FT_SSL_MD5=1 -lm -o $@
-				$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) $(OBJS_SAN) -D FT_SSL_MD5=1 -lm -o $@_san
+				$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) $(OBJS_SAN) -D FT_SSL_MD5=1 -lm -o ${NAME_SAN}
 				@echo "\33[2K\r$(GREEN)$(NAME) compiled :D$(NC)"
 
 valgrind: fclean
@@ -56,12 +57,12 @@ $(OBJS_DIR):
 
 clean:
 				@echo "$(RED)Deleting $(NAME) object...\n"
-				$(RM) $(OBJS_DIR)
+				$(RM) $(OBJS_DIR) $(OBJS_DIR_SAN)
 				@echo "$(GREEN)Done\n$(ND)"
 
 fclean:			clean
 				@echo "$(RED)Deleting $(NAME) executable..."
-				rm -f $(NAME)
+				rm -f $(NAME) $(NAME_SAN)
 				@echo "$(GREEN)Done\n$(ND)"
 
 re:				fclean all
