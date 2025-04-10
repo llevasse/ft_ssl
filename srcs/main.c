@@ -1,4 +1,5 @@
 #include "../include/ft_ssl.h"
+int OPTIONS = 0;
 
 char	*allowed_command[] = {"md5", "sha256", // ft_ssl_md5
 	"base64", "des", "des-ecb", "des-cbc", // ft_ssl_des
@@ -11,16 +12,32 @@ int (*command_functions[])() = {&ft_md5, &ft_sha256, // ft_ssl_md5
 };
 
 int main (int ac, char **av){
-	(void)av[ac - 1];
-	
 	if (ac <= 1){
 		printf("usage: ft_ssl command [flags] [file/string]\n");
 		return 1;
 	}
 	
+	int opt;
+	while ((opt = getopt(ac, av, "sqpr")) != -1) {
+		switch(opt) {
+			case 's':
+				OPTIONS |= OPT_STRING;
+				continue;
+			case 'q':
+				OPTIONS |= OPT_QUIET;
+				continue;
+			case 'p':
+				OPTIONS |= OPT_P;
+				continue;	
+			case 'r':
+				OPTIONS |= OPT_REVERSE;
+				continue;
+		}
+	}
+	
 	for (int i = 0; allowed_command[i]; i++){
-		if (!strcmp(av[1], allowed_command[i])){
-			return (command_functions[i](av[2]));
+		if (!strcmp(av[optind], allowed_command[i])){
+			return (command_functions[i](av[optind + 1]));
 		}
 	}
 	printf("ft_ssl: Error: %s is an invalid command.\n\n", av[1]);

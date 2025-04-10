@@ -1,33 +1,40 @@
 #include "../include/ft_ssl.h"
 #include "../include/ft_md5.h"
 
-int ft_md5(char *input_path){
+extern int OPTIONS;
+
+int ft_md5(char *arg){
 	char *input = 0x0;
 	size_t len = 0;
 	
-	if (input_path){
-		if ((input = read_file(input_path)) == 0x0)
+	if (arg){
+		if (OPTIONS & OPT_STRING){
+			input = arg;
+		}
+		else if ((input = read_file(arg)) == 0x0)
 			return (1);
-		printf("MD5(%s)= ", input_path);
+		printf("MD5(%s)= ", arg);
 	}
 	else{
 		if ((input = read_stdin()) == 0x0)
 			return (1);
 		printf("MD5(stdin)= ");
 	}
+	
 	len = md5_get_padding_len(input);
 	unsigned char *padded;
 	if ((padded = md5_padding(input, len)) == 0x0){
-		free(input);
+		if (!(OPTIONS & OPT_STRING))
+			free(input);
 		fprintf(stderr, "Error while padding message input file : %s\n", strerror(errno));
 		return (1);
 	}
 	md5_process(padded, len);		
 	
-	printf("%zu ", A);
-	printf("%zu ", B);
-	printf("%zu ", C);
-	printf("%zu\n", D);
+	// printf("%zu ", A);
+	// printf("%zu ", B);
+	// printf("%zu ", C);
+	// printf("%zu\n", D);
 	unsigned char digest[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	md5_encode(digest, buffers, 16);
 	for (int i = 0; i < 16; i++)
@@ -51,7 +58,8 @@ void *md5_padding(void *mess, size_t final_len){
 		return (0x0);
 	memset(new, 0, (final_len) + 1);
 	strcpy(new, mess);
-	free(mess);
+	if (!(OPTIONS & OPT_STRING))
+		free(mess);
 	return (new);
 }
 

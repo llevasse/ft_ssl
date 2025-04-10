@@ -8,6 +8,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
+# include <getopt.h>
 
 # ifndef FT_SSL_MD5
 #  define FT_SSL_MD5 0
@@ -36,4 +37,10 @@ char *read_stdin();
 
 
 void	help();
+
+#define OPT_STRING 1
+#define OPT_P 2
+#define OPT_QUIET 4
+#define OPT_REVERSE 8
+
 #endif
