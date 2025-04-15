@@ -25,7 +25,8 @@ OBJS_SAN					=	$(addprefix $(OBJS_DIR_SAN), $(SRC:.c=_san.o))
 
 INC_DIR					=	include/
 INC_FILE				=	include/ft_ssl.h \
-														include/ft_md5.h
+									include/ft_md5.h \
+									include/ft_sha256.h
 
 FLAGS					=	-Wall -Werror -Wextra -g
 INCLUDES				=	-I $(INC_DIR) 
@@ -38,10 +39,6 @@ $(NAME):		$(OBJS_DIR) Makefile $(INC_FILE) $(OBJS) $(OBJS_SAN)
 				$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -D FT_SSL_MD5=1 -lm -o $@
 				$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) $(OBJS_SAN) -D FT_SSL_MD5=1 -lm -o ${NAME_SAN}
 				@echo "\33[2K\r$(GREEN)$(NAME) compiled :D$(NC)"
-
-valgrind: fclean
-				make
-				valgrind ./ft_ssl md5 Makefile
 
 $(OBJS_DIR)%.o:	%.c $(INC_FILE)
 				@mkdir -p $(shell dirname $@)

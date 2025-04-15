@@ -1,12 +1,7 @@
 #ifndef FT_MD5_H
 # define FT_MD5_H
- #ifndef size_t
-		typedef unsigned long size_t;
- #endif
+	#include "ft_ssl.h"
  
-	typedef	__uint32_t uint32_t;
-	typedef	__uint64_t uint64_t;
-	typedef	unsigned char uint8_t;
  typedef struct md5_context{
 		uint32_t buffer[4];
 		uint8_t input[64];

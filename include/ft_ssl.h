@@ -22,8 +22,17 @@
 #  define FT_SSL_RSA 0
 # endif
 
-int ft_md5(char *input_path);
-int ft_sha256(char *input_path);
+
+#ifndef size_t
+	typedef unsigned long size_t;
+#endif
+
+typedef	__uint32_t uint32_t;
+typedef	__uint64_t uint64_t;
+typedef	unsigned char uint8_t;
+
+int ft_md5(char *arg);
+int ft_sha256(char *arg);
 int ft_base64(char *input_path);
 int ft_des(char *input_path);
 int ft_des_ecb(char *input_path);
