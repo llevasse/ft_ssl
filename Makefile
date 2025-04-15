@@ -24,7 +24,8 @@ OBJS					=	$(addprefix $(OBJS_DIR), $(SRC:.c=.o))
 OBJS_SAN					=	$(addprefix $(OBJS_DIR_SAN), $(SRC:.c=_san.o))
 
 INC_DIR					=	include/
-INC_FILE				=	include/ft_ssl.h 
+INC_FILE				=	include/ft_ssl.h \
+														include/ft_md5.h
 
 FLAGS					=	-Wall -Werror -Wextra -g
 INCLUDES				=	-I $(INC_DIR) 
