@@ -37,26 +37,27 @@ FT_FILE *read_file(char *path, FT_FILE *file){
 
 FT_FILE *read_stdin(FT_FILE *file){
 	char *input = 0x0, *tmp = 0x0;
-	size_t len = 1;
+	size_t size = 0;
+	ssize_t len;
 	int first = 1;
 	char buf[INPUT_BUF_LEN];
-	while (read(STDIN_FILENO, buf, INPUT_BUF_LEN) >= 0){
-		len += strlen(buf);
-		tmp = realloc(input, len * sizeof(char));
+	while ((len = read(STDIN_FILENO, buf, INPUT_BUF_LEN)) > 0){
+    tmp = realloc(input, (size + len + 1) * sizeof(char));
 		if (!tmp){
 			free(input);
 			return (0x0);
 		}
 		input = tmp;
 		if (first){
-			input[0] = 0;
+      input[0] = 0;
 			first = 0;
 		}
-		strcat(input, buf);
+    memcpy(input + size, buf, len);
+    size += len;
 		buf[0] = 0;
 	}
 	file->content = input;
-	file->size = len - 1;
+	file->size = size ;
 	return (file);
 }
 
@@ -64,7 +65,6 @@ FT_FILE *get_input(char *arg, char *name){
   FT_FILE *f = malloc(sizeof(*f));
   if (!f)
     return 0x0;
-	char *input = 0x0;
 	
 	if (arg){
 		if (OPTIONS & OPT_STRING){
@@ -85,7 +85,7 @@ FT_FILE *get_input(char *arg, char *name){
 		}
 		if (!(OPTIONS & OPT_QUIET)){
       if (OPTIONS & OPT_P)
-        printf("(\"%s\")= ", input);
+        printf("(\"%s\")= ", f->content);
       else
         printf("%s(stdin)= ", name);
 		}

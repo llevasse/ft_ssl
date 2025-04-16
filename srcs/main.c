@@ -38,7 +38,12 @@ int main (int ac, char **av){
 	
 	for (int i = 0; allowed_command[i]; i++){
 		if (!strcmp(av[optind], allowed_command[i])){
-			return (command_functions[i](av[optind + 1]));
+      if (OPTIONS & OPT_P)
+        command_functions[i](0x0);
+      while (optind + 1 < ac){
+        command_functions[i](av[optind++ + 1]);
+      }
+      return 0;
 		}
 	}
 	printf("ft_ssl: Error: %s is an invalid command.\n\n", av[1]);
