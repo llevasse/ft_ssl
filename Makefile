@@ -48,7 +48,7 @@ $(OBJS_DIR)%.o:	%.c $(INC_FILE)
 $(OBJS_DIR_SAN)%_san.o:	%.c $(INC_FILE)
 				@mkdir -p $(shell dirname $@)
 				@$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) -c $< -o $@
-				@echo "\33[2K\r$(YELLOW)Compiled $<$(NC)"
+				@echo "\33[2K\r$(YELLOW)Compiled $< with -fsanitize=address$(NC)"
 
 $(OBJS_DIR):
 				mkdir -p $(OBJS_DIR)

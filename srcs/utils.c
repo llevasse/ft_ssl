@@ -1,6 +1,9 @@
 #include "../include/ft_ssl.h"
 
 #define INPUT_BUF_LEN 512
+extern int OPTIONS;
+
+
 
 FT_FILE *read_file(char *path, FT_FILE *file){
 	char *input = 0x0, *tmp;
@@ -63,4 +66,36 @@ FT_FILE *read_stdin(FT_FILE *file){
 	file->content = input;
 	file->size = len - 1;
 	return (file);
+}
+
+FT_FILE *get_input(char *arg, char *name){
+  FT_FILE *f = malloc(sizeof(*f));
+  if (!f)
+    return 0x0;
+	char *input = 0x0;
+	
+	if (arg){
+		if (OPTIONS & OPT_STRING){
+			f->content = arg;
+		}
+		else if ((read_file(arg, f)) == 0x0){
+			free(f);
+			return (0x0);
+		}
+		if (!(OPTIONS & OPT_REVERSE) && !(OPTIONS & OPT_QUIET))
+		  printf("%s(%s)= ", name, arg);
+	}
+	else{
+		if ((read_stdin(f)) == 0x0){
+			free(f);
+			return (0x0);
+		}
+		if (!(OPTIONS & OPT_QUIET)){
+      if (OPTIONS & OPT_P)
+        printf("(\"%s\")= ", input);
+      else
+        printf("%s(stdin)= ", name);
+		}
+	}
+	return f;
 }

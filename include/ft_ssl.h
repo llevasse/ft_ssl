@@ -45,6 +45,7 @@ int ft_genrsa(char *input_path);
 int ft_rsa(char *input_path);
 int ft_rsault(char *input_path);
 
+FT_FILE *get_input(char *arg, char *name);
 FT_FILE *read_file(char *path, FT_FILE *file);
 FT_FILE *read_stdin(FT_FILE *file);
 

@@ -4,35 +4,9 @@
 extern int OPTIONS;
 
 int ft_md5(char *arg){
-  FT_FILE *f = malloc(sizeof(*f));
-  if (!f)
-    return 0;
-	char *input = 0x0;
-	
-	if (arg){
-		if (OPTIONS & OPT_STRING){
-			f->content = arg;
-		}
-		else if ((read_file(arg, f)) == 0x0){
-			free(f);
-			return (1);
-		}
-		if (!(OPTIONS & OPT_REVERSE) && !(OPTIONS & OPT_QUIET))
-		  printf("MD5(%s)= ", arg);
-	}
-	else{
-		if ((read_stdin(f)) == 0x0){
-			free(f);
-			return (1);
-		}
-		if (!(OPTIONS & OPT_QUIET)){
-      if (OPTIONS & OPT_P)
-        printf("(\"%s\")= ", input);
-      else
-        printf("MD5(stdin)= ");
-		}
-	}
-	
+  FT_FILE *f = get_input(arg, "MD5");
+	if (!f)
+    return 1;
 	
 	MD5_CONTEXT ctx;
 	md5_init(&ctx);
