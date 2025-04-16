@@ -42,6 +42,8 @@ int main (int ac, char **av){
         command_functions[i](0x0);
       while (optind + 1 < ac){
         command_functions[i](av[optind++ + 1]);
+        if (OPTIONS & OPT_STRING)
+          OPTIONS ^= OPT_STRING;
       }
       return 0;
 		}
