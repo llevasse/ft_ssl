@@ -29,7 +29,9 @@ int ft_md5(char *arg){
 	for (int i = 0; i < 16; i++)
 		printf ("%02x", ctx.digest[i]);
 	printf("\n\n");
- 
+
+  if (arg && !(OPTIONS & OPT_STRING))
+    free(input);
 	return (0);
 }
 
