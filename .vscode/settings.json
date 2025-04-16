@@ -4,6 +4,7 @@
     "md5.h": "c",
     "math.h": "c",
     "getopt.h": "c",
-    "ft_sha256.h": "c"
+    "ft_sha256.h": "c",
+    "ft_ssl.h": "c"
   }
 }

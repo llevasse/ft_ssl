@@ -22,6 +22,10 @@
 #  define FT_SSL_RSA 0
 # endif
 
+typedef struct ft_file {
+  char *content;
+  size_t size;
+} FT_FILE;
 
 #ifndef size_t
 	typedef unsigned long size_t;
@@ -41,8 +45,8 @@ int ft_genrsa(char *input_path);
 int ft_rsa(char *input_path);
 int ft_rsault(char *input_path);
 
-char *read_file(char *path);
-char *read_stdin();
+FT_FILE *read_file(char *path, FT_FILE *file);
+FT_FILE *read_stdin(FT_FILE *file);
 
 
 void	help();

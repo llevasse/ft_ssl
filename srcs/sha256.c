@@ -10,33 +10,39 @@ void printBinary(uint32_t num) {
 }
 
 int ft_sha256(char *arg){
-
-	char *input = 0x0;
+  FT_FILE *f = malloc(sizeof(*f));
+  if (!f)
+    return 0;
 	
 	if (arg){
 		if (OPTIONS & OPT_STRING){
-			input = arg;
+			f->content = arg;
 		}
-		else if ((input = read_file(arg)) == 0x0)
+		else if ((read_file(arg, f)) == 0x0){
+      free(f);
 			return (1);
+		}
 		printf("SHA256(%s)= ", arg);
 	}
 	else{
-		if ((input = read_stdin()) == 0x0)
+		if ((read_stdin(f)) == 0x0){
+      free(f);
 			return (1);
+		}
 		printf("SHA256(stdin)= ");
 	}	
 	
 	SHA256_CONTEXT ctx;
 	sha256_init(&ctx);
-	sha256_process(&ctx, (uint8_t *)input, strlen(input));
+	sha256_process(&ctx, (uint8_t *)f->content, f->size);
 	sha256_finalize(&ctx);
 	for (uint32_t i = 0; i < 8; i++){
-    printf("%x", ctx.buffer[i]);
+    printf("%08x", ctx.buffer[i]);
 	}
 	printf("\n");
-  if (arg && !(OPTIONS & OPT_STRING))
-    free(input);
+  if ((arg && !(OPTIONS & OPT_STRING)) || !arg)
+    free(f->content);
+  free(f);
 	return (0);
 }
 

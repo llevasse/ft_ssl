@@ -3,7 +3,8 @@ int OPTIONS = 0;
 
 char	*allowed_command[] = {"md5", "sha256", // ft_ssl_md5
 	"base64", "des", "des-ecb", "des-cbc", // ft_ssl_des
-	"genrsa", "rsa", "rsautl" // ft_ssl_rsa
+	"genrsa", "rsa", "rsautl", // ft_ssl_rsa
+	0x0
 };
 
 int (*command_functions[])() = {&ft_md5, &ft_sha256, // ft_ssl_md5

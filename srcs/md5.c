@@ -4,34 +4,50 @@
 extern int OPTIONS;
 
 int ft_md5(char *arg){
+  FT_FILE *f = malloc(sizeof(*f));
+  if (!f)
+    return 0;
 	char *input = 0x0;
 	
 	if (arg){
 		if (OPTIONS & OPT_STRING){
-			input = arg;
+			f->content = arg;
 		}
-		else if ((input = read_file(arg)) == 0x0)
+		else if ((read_file(arg, f)) == 0x0){
+			free(f);
 			return (1);
-		printf("MD5(%s)= ", arg);
+		}
+		if (!(OPTIONS & OPT_REVERSE) && !(OPTIONS & OPT_QUIET))
+		  printf("MD5(%s)= ", arg);
 	}
 	else{
-		if ((input = read_stdin()) == 0x0)
+		if ((read_stdin(f)) == 0x0){
+			free(f);
 			return (1);
-		printf("MD5(stdin)= ");
+		}
+		if (!(OPTIONS & OPT_QUIET)){
+      if (OPTIONS & OPT_P)
+        printf("(\"%s\")= ", input);
+      else
+        printf("MD5(stdin)= ");
+		}
 	}
 	
 	
 	MD5_CONTEXT ctx;
 	md5_init(&ctx);
-	md5_process(&ctx, (uint8_t *)input, strlen(input));		
+	md5_process(&ctx, (uint8_t *)f->content, f->size);
 	md5_finalize(&ctx);
 	
 	for (int i = 0; i < 16; i++)
 		printf ("%02x", ctx.digest[i]);
-	printf("\n\n");
+	if (OPTIONS & OPT_REVERSE && !(OPTIONS & OPT_QUIET))
+    printf(" %s", arg);
+	printf("\n");
 
-  if (arg && !(OPTIONS & OPT_STRING))
-    free(input);
+  if ((arg && !(OPTIONS & OPT_STRING)) || !arg)
+    free(f->content);
+  free(f);
 	return (0);
 }
 

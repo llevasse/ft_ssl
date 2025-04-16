@@ -36,18 +36,18 @@ INCLUDES				=	-I $(INC_DIR)
 all:			$(NAME)
 
 $(NAME):		$(OBJS_DIR) Makefile $(INC_FILE) $(OBJS) $(OBJS_SAN)
-				$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -D FT_SSL_MD5=1 -lm -o $@
-				$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) $(OBJS_SAN) -D FT_SSL_MD5=1 -lm -o ${NAME_SAN}
+				@$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -D FT_SSL_MD5=1 -lm -o $@
+				@$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) $(OBJS_SAN) -D FT_SSL_MD5=1 -lm -o ${NAME_SAN}
 				@echo "\33[2K\r$(GREEN)$(NAME) compiled :D$(NC)"
 
 $(OBJS_DIR)%.o:	%.c $(INC_FILE)
 				@mkdir -p $(shell dirname $@)
-				$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+				@$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
 				@echo "\33[2K\r$(YELLOW)Compiled $<$(NC)"
 
 $(OBJS_DIR_SAN)%_san.o:	%.c $(INC_FILE)
 				@mkdir -p $(shell dirname $@)
-				$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) -c $< -o $@
+				@$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) -c $< -o $@
 				@echo "\33[2K\r$(YELLOW)Compiled $<$(NC)"
 
 $(OBJS_DIR):
