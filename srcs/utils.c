@@ -7,23 +7,21 @@ extern int OPTIONS;
 
 FT_FILE *read_file(char *path, FT_FILE *file){
 	char *input = 0x0, *tmp;
-	FILE *f = 0x0;
-	if (path)
-		f = fopen(path, "r");
+	int fd = open(path, O_RDONLY);
 	
-	if (!f){
+	if (fd < 0){
 		fprintf(stderr, "Error opening input file : %s\n", strerror(errno));
 		return (0x0);
 	}
   char buf[INPUT_BUF_LEN];
   size_t len;
   size_t size = 0;
-  while ((len = fread(buf, sizeof(char), INPUT_BUF_LEN, f))){
+  while ((len = read(fd, buf, INPUT_BUF_LEN)) > 0){
     tmp = realloc(input, (size + len + 1) * sizeof(char));
     if (!tmp){
       fprintf(stderr, "Error opening input file : %s\n", strerror(errno));
       free(input);
-      fclose(f);
+      close(fd);
       return (0x0);
     }
     input = tmp;
@@ -31,13 +29,7 @@ FT_FILE *read_file(char *path, FT_FILE *file){
     input[size + len] = 0;
     size += len;
   }
-		if (ferror(f) != 0) {
-			fprintf(stderr, "Error reading input file : %s\n", strerror(errno));
-			fclose(f);
-			free(input);
-			return (0x0);
-		}
-	fclose(f);
+	close(fd);
 	file->content = input;
 	file->size = size;
 	return (file);
@@ -48,7 +40,7 @@ FT_FILE *read_stdin(FT_FILE *file){
 	size_t len = 1;
 	int first = 1;
 	char buf[INPUT_BUF_LEN];
-	while (fgets(buf, INPUT_BUF_LEN, stdin) != 0x0){
+	while (read(STDIN_FILENO, buf, INPUT_BUF_LEN) >= 0){
 		len += strlen(buf);
 		tmp = realloc(input, len * sizeof(char));
 		if (!tmp){
@@ -77,6 +69,7 @@ FT_FILE *get_input(char *arg, char *name){
 	if (arg){
 		if (OPTIONS & OPT_STRING){
 			f->content = arg;
+			f->size = strlen(arg);
 		}
 		else if ((read_file(arg, f)) == 0x0){
 			free(f);
