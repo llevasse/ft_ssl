@@ -15,8 +15,12 @@ int ft_md5(char *arg){
 	
 	for (int i = 0; i < 16; i++)
 		printf ("%02x", ctx.digest[i]);
-	if (OPTIONS & OPT_REVERSE && !(OPTIONS & OPT_QUIET))
-    printf(" %s", arg);
+	if (OPTIONS & OPT_REVERSE && !(OPTIONS & OPT_QUIET)){
+    if ((OPTIONS & OPT_STRING))
+      printf(" \"%s\"", arg);
+    else
+      printf(" %s", arg);
+	}
 	printf("\n");
 
   if ((arg && !(OPTIONS & OPT_STRING)) || !arg)

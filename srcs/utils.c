@@ -78,10 +78,12 @@ FT_FILE *get_input(char *arg, char *name){
 			return (0x0);
 		}
 		if (!(OPTIONS & OPT_QUIET)){
-      if ((OPTIONS & OPT_STRING))
-        printf("%s(\"%s\")= ", name, arg);
-      else if (!(OPTIONS & OPT_REVERSE))
-        printf("%s(%s)= ", name, arg);
+      if (!(OPTIONS & OPT_REVERSE)){
+        if ((OPTIONS & OPT_STRING))
+          printf("%s (\"%s\")= ", name, arg);
+        else
+          printf("%s (%s)= ", name, arg);
+      }
 		}
 	}
 	else{
@@ -93,7 +95,7 @@ FT_FILE *get_input(char *arg, char *name){
       if (OPTIONS & OPT_P)
         printf("(\"%s\")= ", f->content);
       else
-        printf("%s(stdin)= ", name);
+        printf("(stdin)= ");
 		}
 	}
 	return f;

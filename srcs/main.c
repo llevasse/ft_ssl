@@ -25,10 +25,15 @@ int main (int ac, char **av){
 		if (!strcmp(av[command_idx], allowed_command[i])){
       if (OPTIONS & OPT_P)
         command_functions[i](0x0);
-      while (ar_idx + 1 < ac){
-        command_functions[i](av[ar_idx++ + 1]);
-        if (OPTIONS & OPT_STRING)
-          OPTIONS ^= OPT_STRING;
+      if (ar_idx < ac){
+        while (ar_idx < ac){
+          command_functions[i](av[ar_idx++]);
+          if (OPTIONS & OPT_STRING)
+            OPTIONS ^= OPT_STRING;
+        }
+      }
+      else{
+        command_functions[i](0x0);
       }
       return 0;
 		}
