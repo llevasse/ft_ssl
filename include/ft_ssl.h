@@ -35,6 +35,8 @@ typedef	__uint32_t uint32_t;
 typedef	__uint64_t uint64_t;
 typedef	unsigned char uint8_t;
 
+void parse_option(int ac, char **ar);
+
 int ft_md5(char *arg);
 int ft_sha256(char *arg);
 int ft_base64(char *input_path);

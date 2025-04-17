@@ -1,5 +1,7 @@
 #include "../include/ft_ssl.h"
 int OPTIONS = 0;
+int ar_idx = 2;
+int command_idx = 1;
 
 char	*allowed_command[] = {"md5", "sha256", // ft_ssl_md5
 	"base64", "des", "des-ecb", "des-cbc", // ft_ssl_des
@@ -18,30 +20,13 @@ int main (int ac, char **av){
 		return 1;
 	}
 	
-	int opt;
-	while ((opt = getopt(ac, av, "sqpr")) != -1) {
-		switch(opt) {
-			case 's':
-				OPTIONS |= OPT_STRING;
-				continue;
-			case 'q':
-				OPTIONS |= OPT_QUIET;
-				continue;
-			case 'p':
-				OPTIONS |= OPT_P;
-				continue;	
-			case 'r':
-				OPTIONS |= OPT_REVERSE;
-				continue;
-		}
-	}
-	
+	parse_option(ac, av);
 	for (int i = 0; allowed_command[i]; i++){
-		if (!strcmp(av[optind], allowed_command[i])){
+		if (!strcmp(av[command_idx], allowed_command[i])){
       if (OPTIONS & OPT_P)
         command_functions[i](0x0);
-      while (optind + 1 < ac){
-        command_functions[i](av[optind++ + 1]);
+      while (ar_idx + 1 < ac){
+        command_functions[i](av[ar_idx++ + 1]);
         if (OPTIONS & OPT_STRING)
           OPTIONS ^= OPT_STRING;
       }

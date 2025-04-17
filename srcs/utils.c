@@ -2,6 +2,8 @@
 
 #define INPUT_BUF_LEN 512
 extern int OPTIONS;
+extern int ar_idx;
+extern int command_idx;
 
 
 
@@ -10,7 +12,7 @@ FT_FILE *read_file(char *path, FT_FILE *file){
 	int fd = open(path, O_RDONLY);
 	
 	if (fd < 0){
-		fprintf(stderr, "Error opening input file : %s\n", strerror(errno));
+		fprintf(stderr, "Error opening input file '%s' : %s\n", path, strerror(errno));
 		return (0x0);
 	}
   char buf[INPUT_BUF_LEN];
@@ -19,7 +21,7 @@ FT_FILE *read_file(char *path, FT_FILE *file){
   while ((len = read(fd, buf, INPUT_BUF_LEN)) > 0){
     tmp = realloc(input, (size + len + 1) * sizeof(char));
     if (!tmp){
-      fprintf(stderr, "Error opening input file : %s\n", strerror(errno));
+      fprintf(stderr, "Error opening input file '%s' : %s\n", path, strerror(errno));
       free(input);
       close(fd);
       return (0x0);
@@ -75,8 +77,12 @@ FT_FILE *get_input(char *arg, char *name){
 			free(f);
 			return (0x0);
 		}
-		if (!(OPTIONS & OPT_REVERSE) && !(OPTIONS & OPT_QUIET))
-		  printf("%s(%s)= ", name, arg);
+		if (!(OPTIONS & OPT_QUIET)){
+      if ((OPTIONS & OPT_STRING))
+        printf("%s(\"%s\")= ", name, arg);
+      else if (!(OPTIONS & OPT_REVERSE))
+        printf("%s(%s)= ", name, arg);
+		}
 	}
 	else{
 		if ((read_stdin(f)) == 0x0){
@@ -92,3 +98,48 @@ FT_FILE *get_input(char *arg, char *name){
 	}
 	return f;
 }
+
+void pass_arg_to_front(int idx, int ac, char **ar){
+  if (idx <= 1 || idx > ac)
+    return;
+  char *tmp = ar[idx];
+  ar[idx] = ar[idx - 1];
+  ar[idx - 1] = tmp;
+  pass_arg_to_front(idx - 1, ac, ar);  
+}
+
+void parse_option(int ac, char **ar){
+  if (ar_idx > ac)
+    return;
+  for (;ar_idx < ac; ar_idx++){
+    if (ar[ar_idx][0] == '-'){
+      char c = ar[ar_idx][1];
+      switch (c){
+        case 's':
+          OPTIONS |= OPT_STRING;
+          pass_arg_to_front(ar_idx, ac, ar);
+          command_idx++;   
+          ar_idx++;
+          if (ar[ar_idx + 1][0] && ar[ar_idx + 1][0] != '-')
+            return;
+          continue;
+        case 'q':
+          OPTIONS |= OPT_QUIET;
+          continue;
+        case 'p':
+          OPTIONS |= OPT_P;
+          continue;	
+        case 'r':
+          OPTIONS |= OPT_REVERSE;
+          continue;
+        default :
+          break;
+      }
+    }
+  }
+}
+
+
+
+
+
