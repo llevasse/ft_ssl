@@ -158,17 +158,22 @@ void parse_option(int ac, char **ar){
   }
 }
 
+
+
 void	ft_putnbr_base(uint32_t n, const char *base, uint32_t min_len)
 {
   if (min_len != 0){
-    uint32_t l = 1, i = 1;
-    while (i < min_len){
-      l *= 10;
-      i++;
+    uint32_t n_len = 0, n_copy = n;
+    size_t base_len = strlen(base);
+    if (n_copy == 0)
+      n_len++;
+    while (n_copy > 0){
+      n_len++;
+      n_copy /= base_len;
     }
-    while (n < l){
+    uint32_t i = min_len - n_len;
+    while (i-- > 0){
       write(1, "0", 1);
-      l /= 10;
     }
   }
 	if ((size_t)n < strlen(base))
