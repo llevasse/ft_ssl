@@ -65,4 +65,7 @@ fclean:			clean
 
 re:				fclean all
 
+test:	all
+				bash tester.sh "test" "this should work" "a" "" "42"
+
 .PHONY:			all clean fclean re
