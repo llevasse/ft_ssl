@@ -12,7 +12,11 @@ FT_FILE *read_file(char *path, FT_FILE *file){
 	int fd = open(path, O_RDONLY);
 	
 	if (fd < 0){
-		fprintf(stderr, "Error opening input file '%s' : %s\n", path, strerror(errno));
+    write(2, "Error opening input file '", 26);
+    write(2, path, strlen(path));
+    write(2, "' : ", 4);
+    write(2, strerror(errno), strlen(strerror(errno)));
+    write(2, "\n", 1);
 		return (0x0);
 	}
   char buf[INPUT_BUF_LEN];
@@ -21,7 +25,11 @@ FT_FILE *read_file(char *path, FT_FILE *file){
   while ((len = read(fd, buf, INPUT_BUF_LEN)) > 0){
     tmp = realloc(input, (size + len + 1) * sizeof(char));
     if (!tmp){
-      fprintf(stderr, "Error opening input file '%s' : %s\n", path, strerror(errno));
+      write(2, "Error opening input file '", 26);
+      write(2, path, strlen(path));
+      write(2, "' : ", 4);
+      write(2, strerror(errno), strlen(strerror(errno)));
+      write(2, "\n", 1);
       free(input);
       close(fd);
       return (0x0);
@@ -79,10 +87,16 @@ FT_FILE *get_input(char *arg, char *name){
 		}
 		if (!(OPTIONS & OPT_QUIET)){
       if (!(OPTIONS & OPT_REVERSE)){
-        if ((OPTIONS & OPT_STRING))
-          printf("%s (\"%s\")= ", name, arg);
+        write(1, name, strlen(name));
+        write(1, " (", 2);
+        if ((OPTIONS & OPT_STRING)){
+          write(1, "\"", 1);
+          write(1, arg, strlen(arg));
+          write(1, "\"", 1);
+        }
         else
-          printf("%s (%s)= ", name, arg);
+          write(1, arg, strlen(arg));
+        write(1, ")= ", 3);
       }
 		}
 	}
@@ -92,10 +106,13 @@ FT_FILE *get_input(char *arg, char *name){
 			return (0x0);
 		}
 		if (!(OPTIONS & OPT_QUIET)){
-      if (OPTIONS & OPT_P)
-        printf("(\"%s\")= ", f->content);
+      if (OPTIONS & OPT_P){
+        write(1, "(\"", 2);
+        write(1, f->content, strlen(f->content));
+        write(1, "\")= ", 4);
+      }
       else
-        printf("(stdin)= ");
+        write(1, "(stdin)= ", 9);
 		}
 	}
 	return f;
@@ -121,8 +138,8 @@ void parse_option(int ac, char **ar){
           OPTIONS |= OPT_STRING;
           pass_arg_to_front(ar_idx, ac, ar);
           command_idx++;   
-          ar_idx++;
-          if (ar[ar_idx + 1][0] && ar[ar_idx + 1][0] != '-')
+          ar_idx++;          
+          if (!ar[ar_idx + 1] || ar[ar_idx + 1][0] != '-')
             return;
           continue;
         case 'q':
@@ -141,7 +158,25 @@ void parse_option(int ac, char **ar){
   }
 }
 
-
-
-
+void	ft_putnbr_base(uint32_t n, const char *base, uint32_t min_len)
+{
+  if (min_len != 0){
+    uint32_t l = 1, i = 1;
+    while (i < min_len){
+      l *= 10;
+      i++;
+    }
+    while (n < l){
+      write(1, "0", 1);
+      l /= 10;
+    }
+  }
+	if ((size_t)n < strlen(base))
+	  write(1, &base[n], 1);
+	else
+	{
+		ft_putnbr_base(n / strlen(base), base, 0);
+	  write(1, &base[n % strlen(base)], 1);		
+	}
+}
 

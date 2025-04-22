@@ -12,9 +12,9 @@ int ft_sha256(char *arg){
 	sha256_process(&ctx, (uint8_t *)f->content, f->size);
 	sha256_finalize(&ctx);
 	for (uint32_t i = 0; i < 8; i++){
-    printf("%08x", ctx.buffer[i]);
+    ft_putnbr_base(ctx.buffer[i], "0123456789abcdef", 8);
 	}
-	printf("\n");
+	write(1, "\n", 1);
   if ((arg && !(OPTIONS & OPT_STRING)) || !arg)
     free(f->content);
   free(f);

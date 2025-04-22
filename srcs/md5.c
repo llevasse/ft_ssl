@@ -13,15 +13,21 @@ int ft_md5(char *arg){
 	md5_process(&ctx, (uint8_t *)f->content, f->size);
 	md5_finalize(&ctx);
 	
-	for (int i = 0; i < 16; i++)
-		printf ("%02x", ctx.digest[i]);
-	if (OPTIONS & OPT_REVERSE && !(OPTIONS & OPT_QUIET)){
-    if ((OPTIONS & OPT_STRING))
-      printf(" \"%s\"", arg);
-    else
-      printf(" %s", arg);
+	for (uint32_t i = 0; i < 16; i++){
+    ft_putnbr_base(ctx.digest[i], "0123456789abcdef", 2);
 	}
-	printf("\n");
+	if (OPTIONS & OPT_REVERSE && !(OPTIONS & OPT_QUIET)){
+    if ((OPTIONS & OPT_STRING)){
+      write(1, " \"", 2);
+      write(1, arg, strlen(arg));
+      write(1, "\"", 1);
+    }
+    else{
+      write(1, " ", 1);
+      write(1, arg, strlen(arg));
+    }
+	}
+	write(1, "\n", 1);
 
   if ((arg && !(OPTIONS & OPT_STRING)) || !arg)
     free(f->content);
@@ -105,9 +111,9 @@ void md5_finalize(MD5_CONTEXT *ctx){
 	ctx->size -= (uint64_t)padding_length;
 	for(uint32_t j = 0; j < 14; ++j){
 		input[j] = (uint32_t)(ctx->input[(j * 4) + 3]) << 24 |
-									(uint32_t)(ctx->input[(j * 4) + 2]) << 16 |
-									(uint32_t)(ctx->input[(j * 4) + 1]) <<  8 |
-									(uint32_t)(ctx->input[(j * 4)]);
+							(uint32_t)(ctx->input[(j * 4) + 2]) << 16 |
+							(uint32_t)(ctx->input[(j * 4) + 1]) <<  8 |
+							(uint32_t)(ctx->input[(j * 4)]);
 	}
 	input[14] = (uint32_t)ctx->size * 8;
 	input[15] = (uint32_t)((ctx->size * 8) >> 32);

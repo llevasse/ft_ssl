@@ -16,8 +16,8 @@ int (*command_functions[])() = {&ft_md5, &ft_sha256, // ft_ssl_md5
 
 int main (int ac, char **av){
 	if (ac <= 1){
-		printf("usage: ft_ssl command [flags] [file/string]\n");
-		return 1;
+    write(2, "usage: ft_ssl command [flags] [file/string]\n", 44);
+		return 0;
 	}
 	
 	parse_option(ac, av);
@@ -38,15 +38,17 @@ int main (int ac, char **av){
       return 0;
 		}
 	}
-	printf("ft_ssl: Error: %s is an invalid command.\n\n", av[1]);
+	write(2, "ft_ssl: Error: ", 15);
+	write(2, av[command_idx], strlen(av[command_idx]));
+	write(2, " is an invalid command.\n\n", 26);
 	help();
 	return 0;
 }
 
 void	help(){
-	printf("Commands:\n\
+	write(2, "Commands:\n\
 md5\n\
 sha256\n\n\
 Flags:\n\
--p -q -r -s\n");
+-p -q -r -s\n", 42);
 }
