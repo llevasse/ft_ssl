@@ -40,6 +40,7 @@ void ft_putnbr_base(uint32_t n, const char *base, uint32_t min_len);
 
 int ft_md5(char *arg);
 int ft_sha256(char *arg);
+int ft_whirlpool(char *arg);
 int ft_base64(char *input_path);
 int ft_des(char *input_path);
 int ft_des_ecb(char *input_path);

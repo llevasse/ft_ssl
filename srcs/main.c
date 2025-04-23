@@ -3,13 +3,13 @@ int OPTIONS = 0;
 int ar_idx = 2;
 int command_idx = 1;
 
-char	*allowed_command[] = {"md5", "sha256", // ft_ssl_md5
+char	*allowed_command[] = {"md5", "sha256", "whirlpool", // ft_ssl_md5
 	"base64", "des", "des-ecb", "des-cbc", // ft_ssl_des
 	"genrsa", "rsa", "rsautl", // ft_ssl_rsa
 	0x0
 };
 
-int (*command_functions[])() = {&ft_md5, &ft_sha256, // ft_ssl_md5
+int (*command_functions[])() = {&ft_md5, &ft_sha256, &ft_whirlpool, // ft_ssl_md5
 	&ft_base64, &ft_des, &ft_des_ecb, &ft_des_cbc,  // ft_ssl_des
 	&ft_genrsa, &ft_rsa, &ft_rsault  // ft_ssl_rsa
 };
@@ -48,7 +48,8 @@ int main (int ac, char **av){
 void	help(){
 	write(2, "Commands:\n\
 md5\n\
-sha256\n\n\
+sha256\n\
+whirlpool\n\n\
 Flags:\n\
 -p -q -r -s\n", 42);
 }
