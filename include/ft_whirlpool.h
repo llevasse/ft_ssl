@@ -5,7 +5,7 @@
 	typedef struct whirlpool_context {
 		uint64_t buffer[8];
 		uint8_t input[64];
-		uint8_t digest[32];
+		uint8_t bit_length[32];
 		uint64_t size;
  } WHIRLPOOL_CONTEXT;
  

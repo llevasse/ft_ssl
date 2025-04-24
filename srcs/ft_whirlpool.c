@@ -11,6 +11,16 @@ int ft_whirlpool(char *arg){
     
 	WHIRLPOOL_CONTEXT ctx;
 	whirlpool_init(&ctx);
+	
+	uint64_t value = f->size * 8;
+	uint32_t c = 0;
+  for (int i = 31; i >= 0 && (c != 0 || value != 0); i--) {
+      c += ctx.bit_length[i] + ((uint32_t)value & 0xff);
+      ctx.bit_length[i] = (uint8_t)c;
+      c >>= 8;
+      value >>= 8;
+  }
+	
 	whirlpool_process(&ctx, (uint8_t *)f->content, f->size);
 	whirlpool_finalize(&ctx);
 	for (uint32_t i = 0; i < 8; i++){
@@ -30,6 +40,9 @@ void whirlpool_init(WHIRLPOOL_CONTEXT *ctx){
     ctx->buffer[i] = 0;
   for (int i = 0; i < 64; i++)
     ctx->input[i] = 0;
+    
+  for (int i = 0; i < 32; i++)
+    ctx->bit_length[i] = 0;
   ctx->size = 0;
 }
 
@@ -42,14 +55,14 @@ void whirlpool_process(WHIRLPOOL_CONTEXT *ctx, uint8_t *input, size_t N){
     ctx->input[offset++] = *(input + i);
     if (offset % 64 == 0){
       for (int j = 0; j < 8; j++){
-				block[j] = (uint64_t)(ctx->input[(j * 4)]) << 56 |
-				(uint64_t)(ctx->input[(j * 4) + 1]) << 48 |
-				(uint64_t)(ctx->input[(j * 4) + 2]) << 40 |
-				(uint64_t)(ctx->input[(j * 4) + 3]) << 32 |
-				(uint64_t)(ctx->input[(j * 4) + 4]) << 24 |
-				(uint64_t)(ctx->input[(j * 4) + 5]) << 16 |
-				(uint64_t)(ctx->input[(j * 4) + 6]) <<  8 |
-				(uint64_t)(ctx->input[(j * 4) + 7]);
+				block[j] = (uint64_t)(ctx->input[(j * 8)]) << 56 |
+				(uint64_t)(ctx->input[(j * 8) + 1]) << 48 |
+				(uint64_t)(ctx->input[(j * 8) + 2]) << 40 |
+				(uint64_t)(ctx->input[(j * 8) + 3]) << 32 |
+				(uint64_t)(ctx->input[(j * 8) + 4]) << 24 |
+				(uint64_t)(ctx->input[(j * 8) + 5]) << 16 |
+				(uint64_t)(ctx->input[(j * 8) + 6]) <<  8 |
+				(uint64_t)(ctx->input[(j * 8) + 7]);
       }
       
       #ifdef TRACE_INTERMEDIATE_VALUES
@@ -220,15 +233,27 @@ void whirlpool_step(uint64_t *buffer, uint64_t *input){
 void whirlpool_finalize(WHIRLPOOL_CONTEXT *ctx){
   uint64_t offset = ctx->size % 64;
 	uint64_t input[8];
-  uint64_t padding_length = offset < 56 ? 56 - offset : (56 + 64) - offset;
-  //uint64_t padding_length = 64 - offset;
   #ifdef TRACE_INTERMEDIATE_VALUES
+  // uint64_t padding_length = offset < 56 ? 56 - offset : (56 + 64) - offset;
+    uint64_t padding_length = 64 - offset;
     printf("\nEnter finalize stage\n");
-    printf("offset : %lu | padding length : %lu\n", offset, padding_length);
+    printf("offset : %lu | padding length : %lu | ctx size %lu\n", offset, padding_length, ctx->size);
+    
+    printf("bit len : ");
+    for (int i = 0; i < 32; i++){
+      printf("%02x", ctx->bit_length[i]);
+    }
+    printf("\n");
   #endif
-	whirlpool_process(ctx, PADDING, padding_length);
-	ctx->size -= (uint64_t)padding_length;
-  ctx->input[63] = (uint64_t)(ctx->size * 8);
+	
+	for (size_t i = 0; offset < 64; i++){
+    ctx->input[offset++] = *(PADDING + i);
+  }
+	
+	
+	memcpy(&ctx->input[32], ctx->bit_length, 32);
+  // ctx->input[63] = (uint64_t)(ctx->size * 8);
+  
   for (int j = 0; j < 8; j++){
     input[j] = (uint64_t)(ctx->input[(j * 8)]) << 56 |
     (uint64_t)(ctx->input[(j * 8) + 1]) << 48 |
@@ -245,12 +270,14 @@ void whirlpool_finalize(WHIRLPOOL_CONTEXT *ctx){
   #ifdef TRACE_INTERMEDIATE_VALUES
     printf("The 8x8 matrix Z' derived from the data-string is as follows.\n");
     for (int i = 0 ; i < 8; i++){
+      // printf("%016X\n", ctx->input[i]);
       printf("    %02X %02X %02X %02X %02X %02X %02X %02X\n",
           ctx->input[(i * 8) + 0], ctx->input[(i * 8) + 1], ctx->input[(i * 8) + 2], ctx->input[(i * 8) + 3],
           ctx->input[(i * 8) + 4], ctx->input[(i * 8) + 5], ctx->input[(i * 8) + 6], ctx->input[(i * 8) + 7]);
-        }
+    }
     printf("\n");
   #endif /* ?TRACE_INTERMEDIATE_VALUES */
 	
 	whirlpool_step(ctx->buffer, input);
+	// whirlpool_step(ctx->buffer, input);
 }
