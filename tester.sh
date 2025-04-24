@@ -44,7 +44,7 @@ do
     ((correct_sha256 += 1))
   fi
   
-  out1="$(./ft_ssl whirlpool -s "$arg" | cut -d ' ' -f2)"
+  out1="$(echo -n "$arg" | ./ft_ssl whirlpool | cut -d ' ' -f2)"
   out2="$(rhash --whirlpool -m "$arg" | cut -d ' ' -f1)"
   if [ "${out1}" != "${out2}" ]; then
     echo -e "${RED}"
