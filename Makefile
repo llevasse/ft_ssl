@@ -12,8 +12,8 @@ NC						=	\033[0m
 #---FT_SSL_VAR-----------------------------------
 SRC						=	srcs/main.c \
 											srcs/utils.c \
-											srcs/md5.c \
-											srcs/sha256.c \
+											srcs/ft_md5.c \
+											srcs/ft_sha256.c \
 											srcs/ft_whirlpool.c \
 											srcs/base64.c \
 											srcs/rsa.c

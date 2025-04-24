@@ -3,7 +3,7 @@
 extern int OPTIONS;
 
 int ft_sha256(char *arg){
-  FT_FILE *f = get_input(arg, "SHA256");
+	FT_FILE *f = get_input(arg, "SHA256");
 	if (!f)
     return 1;
     

@@ -10,5 +10,6 @@
  } WHIRLPOOL_CONTEXT;
  
 void whirlpool_init(WHIRLPOOL_CONTEXT *ctx);
+void whirlpool_process(WHIRLPOOL_CONTEXT *ctx, uint8_t *input, size_t N);
  
 #endif
