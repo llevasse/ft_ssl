@@ -1,10 +1,6 @@
 #ifndef FT_SHA256_H
 # define FT_SHA256_H
 	#include "ft_ssl.h"
- 
-	typedef	__uint32_t uint32_t;
-	typedef	__uint64_t uint64_t;
-	typedef	unsigned char uint8_t;
 	
  typedef struct sha256_context {
 		uint32_t buffer[8];

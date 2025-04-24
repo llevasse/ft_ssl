@@ -1,9 +1,14 @@
 #ifndef FT_WHIRLPOOL_H
 # define FT_WHIRLPOOL_H
 	#include "ft_ssl.h"
+ 	
+	typedef struct whirlpool_context {
+		uint64_t buffer[8];
+		uint8_t input[64];
+		uint8_t digest[32];
+		uint64_t size;
+ } WHIRLPOOL_CONTEXT;
  
-	typedef	__uint32_t uint32_t;
-	typedef	__uint64_t uint64_t;
-	typedef	unsigned char uint8_t;
-	
+void whirlpool_init(WHIRLPOOL_CONTEXT *ctx);
+ 
 #endif
