@@ -23,11 +23,9 @@ int ft_whirlpool(char *arg){
 	
 	whirlpool_process(&ctx, (uint8_t *)f->content, f->size);
 	whirlpool_finalize(&ctx);
-	for (uint32_t i = 0; i < 8; i++){
-    ft_putnbr_base(ctx.buffer[i], "0123456789abcdef", 16);
-    // write(1,":", 1);
-	}
-	write(1, "\n", 1);
+
+  print_digest(arg, ctx.buffer, UINT64, 8, 16);
+
 	if ((arg && !(OPTIONS & OPT_STRING)) || !arg)
 	  free(f->content);
 	free(f);

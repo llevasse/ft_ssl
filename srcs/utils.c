@@ -160,10 +160,7 @@ void parse_option(int ac, char **ar){
   }
 }
 
-
-
-void	ft_putnbr_base(uint64_t n, const char *base, uint64_t min_len)
-{
+void	ft_putnbr_base(uint64_t n, const char *base, uint64_t min_len){
   if (min_len != 0){
     uint64_t n_len = 0, n_copy = n;
     size_t base_len = strlen(base);
@@ -185,5 +182,39 @@ void	ft_putnbr_base(uint64_t n, const char *base, uint64_t min_len)
 		ft_putnbr_base(n / strlen(base), base, 0);
 	  write(1, &base[n % strlen(base)], 1);		
 	}
+}
+
+void  print_digest(char *name, void *digest, int type, size_t digest_arr_length, size_t padding_length){
+  
+  if (type == UINT8){
+    uint8_t *d = (uint8_t *)digest;
+    for (uint32_t i = 0; i < digest_arr_length; i++){
+      ft_putnbr_base(d[i], "0123456789abcdef", padding_length);
+    }
+  }
+  else if (type == UINT32){
+    uint32_t *d = (uint32_t *)digest;
+    for (uint32_t i = 0; i < digest_arr_length; i++){
+      ft_putnbr_base(d[i], "0123456789abcdef", padding_length);
+    }
+  }
+  else{
+    uint64_t *d = (uint64_t *)digest;
+    for (uint32_t i = 0; i < digest_arr_length; i++){
+      ft_putnbr_base(d[i], "0123456789abcdef", padding_length);
+    }
+  }
+	if (OPTIONS & OPT_REVERSE && !(OPTIONS & OPT_QUIET)){
+    if ((OPTIONS & OPT_STRING)){
+      write(1, " \"", 2);
+      write(1, name, strlen(name));
+      write(1, "\"", 1);
+    }
+    else{
+      write(1, " ", 1);
+      write(1, name, strlen(name));
+    }
+	}
+	write(1, "\n", 1);
 }
 

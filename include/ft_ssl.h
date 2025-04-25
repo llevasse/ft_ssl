@@ -35,8 +35,14 @@ typedef	__uint32_t uint32_t;
 typedef	__uint64_t uint64_t;
 typedef	unsigned char uint8_t;
 
+#define UINT8 8
+#define UINT32 32
+#define UINT64 64
+
 void parse_option(int ac, char **ar);
 void ft_putnbr_base(uint64_t n, const char *base, uint64_t min_len);
+void  print_digest(char *name, void *digest, int type, size_t digest_arr_length, size_t padding_length);
+
 
 int ft_md5(char *arg);
 int ft_sha256(char *arg);

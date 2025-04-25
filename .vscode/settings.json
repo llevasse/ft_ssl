@@ -5,6 +5,7 @@
     "math.h": "c",
     "getopt.h": "c",
     "ft_sha256.h": "c",
-    "ft_ssl.h": "c"
+    "ft_ssl.h": "c",
+    "ft_whirlpool.h": "c"
   }
 }

@@ -12,22 +12,8 @@ int ft_md5(char *arg){
 	md5_init(&ctx);
 	md5_process(&ctx, (uint8_t *)f->content, f->size);
 	md5_finalize(&ctx);
-	
-	for (uint32_t i = 0; i < 16; i++){
-    ft_putnbr_base(ctx.digest[i], "0123456789abcdef", 2);
-	}
-	if (OPTIONS & OPT_REVERSE && !(OPTIONS & OPT_QUIET)){
-    if ((OPTIONS & OPT_STRING)){
-      write(1, " \"", 2);
-      write(1, arg, strlen(arg));
-      write(1, "\"", 1);
-    }
-    else{
-      write(1, " ", 1);
-      write(1, arg, strlen(arg));
-    }
-	}
-	write(1, "\n", 1);
+
+  print_digest(arg, ctx.digest, UINT8, 16, 2);
 
   if ((arg && !(OPTIONS & OPT_STRING)) || !arg)
     free(f->content);
