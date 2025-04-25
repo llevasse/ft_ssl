@@ -53,6 +53,7 @@ FT_FILE *read_stdin(FT_FILE *file){
 	char buf[INPUT_BUF_LEN];
 	while ((len = read(STDIN_FILENO, buf, INPUT_BUF_LEN)) > 0){
     tmp = realloc(input, (size + len + 1) * sizeof(char));
+    memset(tmp + size, 0, len + 1);
 		if (!tmp){
 			free(input);
 			return (0x0);
@@ -204,17 +205,19 @@ void  print_digest(char *name, void *digest, int type, size_t digest_arr_length,
       ft_putnbr_base(d[i], "0123456789abcdef", padding_length);
     }
   }
-	if (OPTIONS & OPT_REVERSE && !(OPTIONS & OPT_QUIET)){
-    if ((OPTIONS & OPT_STRING)){
-      write(1, " \"", 2);
-      write(1, name, strlen(name));
-      write(1, "\"", 1);
+  if (name){
+    if (OPTIONS & OPT_REVERSE && !(OPTIONS & OPT_QUIET)){
+      if ((OPTIONS & OPT_STRING)){
+        write(1, " \"", 2);
+        write(1, name, strlen(name));
+        write(1, "\"", 1);
+      }
+      else{
+        write(1, " ", 1);
+        write(1, name, strlen(name));
+      }
     }
-    else{
-      write(1, " ", 1);
-      write(1, name, strlen(name));
-    }
-	}
+  }
 	write(1, "\n", 1);
 }
 

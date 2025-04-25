@@ -43,9 +43,9 @@ void sha256_process(SHA256_CONTEXT *ctx, uint8_t *input, size_t N){
 		if (offset % 64 == 0){
       for (uint32_t j = 0; j < 16; j++){
 				chunk[j] = (uint32_t)(ctx->input[(j * 4)]) << 24 |
-				(uint32_t)(ctx->input[(j * 4) + 1]) << 16 |
-				(uint32_t)(ctx->input[(j * 4) + 2]) <<  8 |
-				(uint32_t)(ctx->input[(j * 4) + 3]);
+                    (uint32_t)(ctx->input[(j * 4) + 1]) << 16 |
+                    (uint32_t)(ctx->input[(j * 4) + 2]) <<  8 |
+                    (uint32_t)(ctx->input[(j * 4) + 3]);
       }
 			sha256_step(ctx->buffer, chunk);
 			offset = 0;

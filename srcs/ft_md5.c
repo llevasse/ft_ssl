@@ -39,7 +39,10 @@ void *md5_process(MD5_CONTEXT *ctx, uint8_t *mess, size_t N){
 		ctx->input[offset++] = *(mess + i);
 		if (offset % 64 == 0){
 			for(uint32_t j = 0; j < 16; ++j){
-				input[j] = (uint32_t)(ctx->input[(j * 4) + 3]) << 24 | (uint32_t)(ctx->input[(j * 4) + 2]) << 16 | (uint32_t)(ctx->input[(j * 4) + 1]) <<  8 | (uint32_t)(ctx->input[(j * 4)]);
+				input[j] = (uint32_t)(ctx->input[(j * 4) + 3]) << 24 | 
+                    (uint32_t)(ctx->input[(j * 4) + 2]) << 16 | 
+                    (uint32_t)(ctx->input[(j * 4) + 1]) <<  8 | 
+                    (uint32_t)(ctx->input[(j * 4)]);
 			}
 			md5_step(ctx->buffer, input);
 			offset = 0;
