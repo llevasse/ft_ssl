@@ -5,11 +5,16 @@ extern int OPTIONS;
 extern int ar_idx;
 extern int command_idx;
 
-
-
 FT_FILE *read_file(char *path, FT_FILE *file){
 	char *input = 0x0, *tmp;
-	int fd = open(path, O_RDONLY);
+  int fd = 0;
+  if ((fd = open(path, __O_DIRECTORY)) >= 0){
+    close(fd);
+    write(2, "Error opening input path : path is a directory\n", 47);
+    return (0x0);
+  }
+
+	fd = open(path, O_RDONLY);
 	
 	if (fd < 0){
     write(2, "Error opening input file '", 26);
@@ -53,11 +58,14 @@ FT_FILE *read_stdin(FT_FILE *file){
 	char buf[INPUT_BUF_LEN];
 	while ((len = read(STDIN_FILENO, buf, INPUT_BUF_LEN)) > 0){
     tmp = realloc(input, (size + len + 1) * sizeof(char));
-    memset(tmp + size, 0, len + 1);
 		if (!tmp){
+      write(2, "Error reading STDIN : ", 22);
+      write(2, strerror(errno), strlen(strerror(errno)));
+      write(2, "\n", 1);
 			free(input);
 			return (0x0);
 		}
+    memset(tmp + size, 0, len + 1);
 		input = tmp;
 		if (first){
       input[0] = 0;
