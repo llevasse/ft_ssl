@@ -155,6 +155,8 @@ void parse_option(int ac, char **ar){
           break;
       }
     }
+    else
+      break;
   }
 }
 
