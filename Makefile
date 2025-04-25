@@ -44,12 +44,12 @@ $(NAME):		$(OBJS_DIR) Makefile $(INC_FILE) $(OBJS) $(OBJS_SAN)
 
 $(OBJS_DIR)%.o:	%.c $(INC_FILE)
 				@mkdir -p $(shell dirname $@)
-				@$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+				@$(CC) $(FLAGS) $(INCLUDES) -D FT_SSL_MD5=1 -c $< -o $@
 				@echo "\33[2K\r$(YELLOW)Compiled $<$(NC)"
 
 $(OBJS_DIR_SAN)%_san.o:	%.c $(INC_FILE)
 				@mkdir -p $(shell dirname $@)
-				@$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) -c $< -o $@
+				@$(CC) $(FLAGS) -fsanitize=address $(INCLUDES) -D FT_SSL_MD5=1 -c $< -o $@
 				@echo "\33[2K\r$(YELLOW)Compiled $< with -fsanitize=address$(NC)"
 
 $(OBJS_DIR):

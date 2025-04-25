@@ -80,6 +80,13 @@ FT_FILE *read_stdin(FT_FILE *file){
 	return (file);
 }
 
+
+/**
+ * Get hashing input from STDIN, file, or string, and print hashing 'introduction'
+ *
+ * @param arg  input argument (filename, input string, or 0x0 if read from STDIN)
+ * @param name name of the hashing algorithm to use.
+*/
 FT_FILE *get_input(char *arg, char *name){
   FT_FILE *f = malloc(sizeof(*f));
   if (!f)
@@ -136,6 +143,13 @@ void pass_arg_to_front(int idx, int ac, char **ar){
   pass_arg_to_front(idx - 1, ac, ar);  
 }
 
+/**
+ * Parse command options and reorganise arguments order to have the options at the front of the array
+ * update ar_idx to position of first non-option and non-command argument, and update command_idx to command argument position
+ *
+ * @param ac  number of arguments
+ * @param ar  array of arguments.
+*/
 void parse_option(int ac, char **ar){
   if (ar_idx > ac)
     return;
@@ -193,6 +207,15 @@ void	ft_putnbr_base(uint64_t n, const char *base, uint64_t min_len){
 	}
 }
 
+/**
+ * Print hash's context buffer as it's digest
+ *
+ * @param name    input name (filename, input string, or 0x0 if from STDIN)
+ * @param digest  pointer to context buffer/digest array.
+ * @param type    *digest type (UINT8 | UINT32 | UINT64) (UINT64 by default)
+ * @param digest_arr_length length of digest array
+ * @param padding_length      minimum length of printed digest element
+*/
 void  print_digest(char *name, void *digest, int type, size_t digest_arr_length, size_t padding_length){
   
   if (type == UINT8){

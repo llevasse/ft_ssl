@@ -12,14 +12,24 @@
 
 # ifndef FT_SSL_MD5
 #  define FT_SSL_MD5 0
+# else
+#  define NB_AVAILABLE_COMMAND 3
 # endif
 
 # ifndef FT_SSL_DES
 #  define FT_SSL_DES 0
+# else
+#  define NB_AVAILABLE_COMMAND 7
 # endif
 
 # ifndef FT_SSL_RSA
 #  define FT_SSL_RSA 0
+# else
+#  define NB_AVAILABLE_COMMAND 10
+# endif
+
+# ifndef NB_AVAILABLE_COMMAND
+#  define NB_AVAILABLE_COMMAND 0
 # endif
 
 typedef struct ft_file {

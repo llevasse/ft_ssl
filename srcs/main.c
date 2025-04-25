@@ -21,7 +21,7 @@ int main (int ac, char **av){
 	}
 	
 	parse_option(ac, av);
-	for (int i = 0; allowed_command[i]; i++){
+	for (int i = 0; i < NB_AVAILABLE_COMMAND; i++){
 		if (!strcmp(av[command_idx], allowed_command[i])){
       if (OPTIONS & OPT_P)
         command_functions[i](0x0);
@@ -46,10 +46,12 @@ int main (int ac, char **av){
 }
 
 void	help(){
-	write(2, "Commands:\n\
-md5\n\
-sha256\n\
-whirlpool\n\n\
-Flags:\n\
--p -q -r -s\n", 42);
+	write(2, "Commands:\n", 11); 
+  for (int i = 0; i < NB_AVAILABLE_COMMAND; i++){
+    write(2, allowed_command[i], strlen(allowed_command[i])); 
+    write(2, "\n", 1); 
+  }
+	write(2, "\n", 1); 
+  write(2, "Flags:\n\
+-p -q -r -s\n", 20);
 }
